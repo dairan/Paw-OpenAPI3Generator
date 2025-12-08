@@ -1,6 +1,6 @@
 {
   "name": "paw-openapigenerator",
-  "version": "0.0.9",
+  "version": "0.1.0",
   "description": "A Paw Extension to export requests to the OpenAPI format.",
   "main": "src/index.ts",
   "license": "MIT",
