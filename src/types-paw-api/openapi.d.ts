@@ -27,6 +27,8 @@ export interface OpenAPIObject {
     security?: SecurityRequirementObject[]
     tags?: TagObject[]
     externalDocs?: ExternalDocumentationObject
+    jsonSchemaDialect?: string
+    webhooks?: PathsObject
 }
 
 
@@ -51,6 +53,7 @@ export interface ContactObject {
 export interface LicenseObject {
     name: string
     url?: string
+    identifier?: string
 }
 
 export interface ServerObject {
@@ -210,6 +213,13 @@ export interface ReferenceObject {
 }
 
 export interface SchemaObject {
+    // JSON Schema 2020-12 meta-schema fields (3.1.0)
+    $id?: string
+    $schema?: string
+    $vocabulary?: MapKeyedWithString<boolean>
+    $comment?: string
+
+    // Validation keywords
     title?: string
     multipleOf?: number
     maximum?: number
@@ -227,6 +237,7 @@ export interface SchemaObject {
     required?: boolean
     enum?: string[]
 
+    // Type and composition
     type?: string
     allOf?: (SchemaObject | ReferenceObject)[]
     oneOf?: ( SchemaObject | ReferenceObject)[]
@@ -239,6 +250,7 @@ export interface SchemaObject {
     format?: string
     default?: any
 
+    // OAS 3.0 specific
     nullable?: boolean
     discriminator?: DiscriminatorObject
     readOnly?: boolean
@@ -247,6 +259,22 @@ export interface SchemaObject {
     externalDocs?: ExternalDocumentationObject
     example?: any
     deprecated?: boolean
+
+    // JSON Schema 2020-12 additional fields (3.1.0)
+    const?: any
+    contains?: SchemaObject | ReferenceObject
+    maxContains?: number
+    minContains?: number
+    patternProperties?: MapKeyedWithString<SchemaObject | ReferenceObject>
+    dependentSchemas?: MapKeyedWithString<SchemaObject | ReferenceObject>
+    dependentRequired?: MapKeyedWithString<string[]>
+    propertyNames?: SchemaObject | ReferenceObject
+    unevaluatedItems?: SchemaObject | ReferenceObject | boolean
+    unevaluatedProperties?: SchemaObject | ReferenceObject | boolean
+    if?: SchemaObject | ReferenceObject
+    then?: SchemaObject | ReferenceObject
+    else?: SchemaObject | ReferenceObject
+    examples?: any[]
 }
 
 export interface DiscriminatorObject {
@@ -272,6 +300,9 @@ export type SecuritySchemeObject = {
     description?: string
     scheme: 'basic' | 'bearer' | string
     bearerFormat?: string
+} | {
+    type: "mutualTLS"
+    description?: string
 } | {
     type: "oauth2"
     description?: string

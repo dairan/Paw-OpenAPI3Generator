@@ -40,7 +40,7 @@ export default class PawToOpenapiConverter {
 
   generateOutput(): OpenAPI.OpenAPIObject {
     return {
-      openapi: '3.0.3',
+      openapi: '3.1.0',
       info: this.info,
       paths: this.paths,
       components: this.components
