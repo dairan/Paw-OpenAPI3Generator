@@ -20,6 +20,7 @@ export const BasicCredentialsLabel = 'Basic credentials'
  */
 export interface OpenAPIObject {
     openapi: string
+    jsonSchemaDialect?: string
     info: InfoObject
     servers?: ServerObject[]
     paths: PathsObject
@@ -227,7 +228,7 @@ export interface SchemaObject {
     required?: boolean
     enum?: string[]
 
-    type?: string
+    type?: string | string[] // JSON Schema 2020-12: supports array of types for union types (e.g., ["string", "null"] for nullable)
     allOf?: (SchemaObject | ReferenceObject)[]
     oneOf?: ( SchemaObject | ReferenceObject)[]
     anyOf?: ( SchemaObject | ReferenceObject)[]
@@ -239,6 +240,10 @@ export interface SchemaObject {
     format?: string
     default?: any
 
+    /**
+     * @deprecated Deprecated in OpenAPI 3.1.0 in favor of using type arrays. Use type: ["string", "null"] instead.
+     * Kept for backward compatibility.
+     */
     nullable?: boolean
     discriminator?: DiscriminatorObject
     readOnly?: boolean
@@ -247,6 +252,11 @@ export interface SchemaObject {
     externalDocs?: ExternalDocumentationObject
     example?: any
     deprecated?: boolean
+    
+    // JSON Schema 2020-12 keywords
+    unevaluatedProperties?: boolean | SchemaObject | ReferenceObject
+    dependentRequired?: MapKeyedWithString<string[]>
+    dependentSchemas?: MapKeyedWithString<SchemaObject | ReferenceObject>
 }
 
 export interface DiscriminatorObject {
